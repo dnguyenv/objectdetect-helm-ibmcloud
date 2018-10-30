@@ -1,0 +1,19 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ .Values.vrtc.name }}
+  annotations:  
+    ingress.bluemix.net/rewrite-path: "serviceName=objectdetection rewrite=/"
+spec:
+  tls:
+  - hosts:
+    - mec-poc.us-south.containers.appdomain.cloud
+    secretName: mec-poc
+  rules:
+  - host: mec-poc.us-south.containers.appdomain.cloud
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: {{ .Values.vrtc.name }}
+          servicePort: 5000

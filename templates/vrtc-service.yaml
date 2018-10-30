@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.vrtc.name }}
+spec:
+  type: {{ .Values.vrtc.service.internal.type }} # Make this service a NodePort type so it can be accessed from outside of the cluster
+  ports:
+#  - name: nodeport1
+#    targetPort: 5000
+#    protocol: TCP    
+#    nodePort: {{ .Values.vrtc.service.external.port }}
+#    port: 5000
+  - name: clusterport1
+    targetPort: 5000
+    protocol: TCP    
+    #nodePort: {{ .Values.vrtc.service.external.port }}
+    port: 5000 
+  selector:
+    app: {{ template "vrtc.name" . }}    
+    component: "{{ .Values.vrtc.name }}"
+    release: {{ .Release.Name }}

@@ -1,0 +1,36 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ template "vrtc.fullname" . }}
+  labels:
+    app: {{ template "vrtc.fullname" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    release: {{ .Release.Name }}
+    component: {{ .Values.vrtc.name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "vrtc.name" . }}
+      release: {{ .Release.Name }}
+      component: {{ .Values.vrtc.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "vrtc.name" . }}
+        release: {{ .Release.Name }}
+        component: {{ .Values.vrtc.name }}
+    spec:
+      containers:
+        - name: {{ .Values.vrtc.name }}
+          image: "{{ .Values.vrtc.image.repository }}:{{ .Values.vrtc.image.tag }}"
+          imagePullPolicy: {{ .Values.vrtc.image.pullPolicy }}
+{{ if (.Values.vrtc.enableGPU) and eq .Values.vrtc.enableGPU "yes" }}
+          resources:
+            limits:
+              alpha.kubernetes.io/nvidia-gpu: "{{.Values.vrtc.gpuNum}}"
+{{ end }}         
+          ports:
+            - name: {{ .Values.vrtc.name }}
+              containerPort: 5000
+              protocol: TCP

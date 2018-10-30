@@ -1,0 +1,7 @@
+apiVersion: v1
+description: Helm chart for deploying VRTC on IBM Cloud
+maintainers:
+- email: dnguyenv@us.ibm.com
+  name: Duy Nguyen
+name: object-detection
+version: 1.0.1
